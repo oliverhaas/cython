@@ -133,6 +133,11 @@ cdef extern from "cpp_operators_helper.h" nogil:
         int& operator>(int) except +
         int& operator<(int) except +
 
+        int* operator+=(int) except +
+        int* operator-=(int) except +
+        int* operator*=(int) except +
+        int* operator/=(int) except +
+        
         int& operator[](int) except +
         int& operator()(int) except +
 
@@ -316,6 +321,29 @@ def test_index_assignment():
     iout(t[0][100], typeof(t[0][100]))
     t[0][99] = 123
     iout(t[0](100), typeof(t[0](100)))
+    del t
+
+
+def test_inplace():
+    """
+    >>> test_inplace()
+    0 [int &]
+    10 [int &]
+    7 [int &]
+    35 [int &]
+    17 [int &]
+    """
+    cdef RefTestOps* t = new RefTestOps()
+    iout(t[0][0], typeof(t[0][0]))
+    t[0][0] += 10
+    iout(t[0][0], typeof(t[0][0]))
+    t[0][0] -= 3
+    iout(t[0][0], typeof(t[0][0]))
+    t[0][0] *= 5
+    iout(t[0][0], typeof(t[0][0]))
+    t[0][0] /= 2
+    iout(t[0][0], typeof(t[0][0]))
+    
     del t
 
 
